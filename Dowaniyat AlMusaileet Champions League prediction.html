@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dowaniyat Almusaileet UCL League Phase 2024/2025 Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        td, th {
+            padding: 10px;
+            text-align: left;
+        }
+        select {
+            width: 300px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        .light-green {
+            background-color: #d4edda;
+        }
+        .yellow {
+            background-color: #fff3cd;
+        }
+        .light-red {
+            background-color: #f8d7da;
+        }
+        .team-logo {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+        .submit-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <script>
+        const teams = [
+            {name: "Real Madrid", logo: "Real_Madrid_CF.svg.png"},
+            {name: "Manchester City", logo: "Manchester_City_FC_badge.svg.png"},
+            {name: "Bayern Munich", logo: "FC_Bayern_München_logo_(2017).svg.png"},
+            {name: "Paris Saint-Germain", logo: "Paris_Saint-Germain_F.C..svg.png"},
+            {name: "Liverpool", logo: "Liverpool_FC.svg.png"},
+            {name: "Inter Milan", logo: "FC_Internazionale_Milano_2021.svg.png"},
+            {name: "Borussia Dortmund", logo: "Borussia_Dortmund_logo.svg.png"},
+            {name: "RB Leipzig", logo: "RB_Leipzig_2014_logo.svg.png"},
+            {name: "Barcelona", logo: "FC_Barcelona_(crest).svg.png"},
+            {name: "Bayer Leverkusen", logo: "Bayer_04_Leverkusen_logo.svg.png"},
+            {name: "Atlético Madrid", logo: "Atletico_Madrid_Logo_2024.svg.png"},
+            {name: "Atalanta", logo: "AtalantaBC.svg.png"},
+            {name: "Juventus", logo: "Juventus_FC_-_pictogram_black_(Italy,_2017).svg.png"},
+            {name: "Benfica", logo: "SL_Benfica_logo.svg.png"},
+            {name: "Arsenal", logo: "Arsenal_FC.svg.png"},
+            {name: "Club Brugge", logo: "Club_Brugge_KV_logo.svg.png"},
+            {name: "Shakhtar Donetsk", logo: "FC_Shakhtar_Donetsk.svg.png"},
+            {name: "AC Milan", logo: "Logo_of_AC_Milan.svg.png"},
+            {name: "Feyenoord", logo: "Feyenoord_logo_since_2024.svg.png"},
+            {name: "Sporting CP", logo: "Sporting_Clube_de_Portugal_(Logo).svg.png"},
+            {name: "PSV Eindhoven", logo: "PSV_Eindhoven.svg.png"},
+            {name: "Dinamo Zagreb", logo: "Dinamo_Zagreb_logo.png"},
+            {name: "Red Bull Salzburg", logo: "FC_Red_Bull_Salzburg_logo.svg.png"},
+            {name: "Lille", logo: "Lille_OSC_2018_logo.svg.png"},
+            {name: "Red Star Belgrade", logo: "Grb-fk-crvena-zvezda.svg.png"},
+            {name: "Young Boys", logo: "BSC_Young_Boys_logo.svg.png"},
+            {name: "Celtic", logo: "Celtic_FC_crest.svg.png"},
+            {name: "Slovan Bratislava", logo: "SK_Slovan_Bratislava_logo.svg.png"},
+            {name: "Monaco", logo: "LogoASMonacoFC2021.svg.png"},
+            {name: "Sparta Prague", logo: "AC-Sparta-LOGO2021.svg.png"},
+            {name: "Aston Villa", logo: "Aston_Villa_FC_new_crest.svg.png"},
+            {name: "Bologna", logo: "Bologna_F.C._1909_logo.svg.png"},
+            {name: "Girona", logo: "Girona_FC_Logo.svg.png"},
+            {name: "VfB Stuttgart", logo: "VfB_Stuttgart_1893_Logo.svg.png"},
+            {name: "Sturm Graz", logo: "SK_Sturm_Graz_logo.svg.png"},
+            {name: "Brest", logo: "Stade_Brestois_29_logo.svg.png"}
+        ];
+
+        function populateSelects() {
+            const tableBody = document.querySelector("tbody");
+            let colorClass = "light-green";
+            teams.forEach((team, index) => {
+                if (index === 8) colorClass = "yellow";
+                if (index === 24) colorClass = "light-red";
+
+                const row = document.createElement("tr");
+                row.className = colorClass;
+
+                const positionCell = document.createElement("td");
+                positionCell.textContent = index + 1;
+
+                const logoCell = document.createElement("td");
+                const logoImg = document.createElement("img");
+                logoImg.className = "team-logo";
+                logoImg.style.display = "none";
+                logoCell.appendChild(logoImg);
+
+                const selectCell = document.createElement("td");
+                const select = document.createElement("select");
+                const defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.text = "Select a team";
+                select.appendChild(defaultOption);
+
+                teams.forEach(team => {
+                    const option = document.createElement("option");
+                    option.value = team.name;
+                    option.text = team.name;
+                    select.appendChild(option);
+                });
+
+                select.addEventListener("change", () => updateSelects());
+
+                selectCell.appendChild(select);
+                row.appendChild(positionCell);
+                row.appendChild(logoCell);
+                row.appendChild(selectCell);
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateSelects() {
+            const selectedTeams = Array.from(document.querySelectorAll("select"))
+                .map(select => select.value)
+                .filter(value => value !== "");
+
+            const selects = document.querySelectorAll("select");
+            selects.forEach(select => {
+                Array.from(select.options).forEach(option => {
+                    if (option.value !== select.value) {
+                        option.disabled = selectedTeams.includes(option.value);
+                    }
+                });
+            });
+
+            updateLogos();
+        }
+
+        function updateLogos() {
+            const selects = document.querySelectorAll("select");
+            selects.forEach(select => {
+                const logoImg = select.parentNode.previousSibling.querySelector(".team-logo");
+                if (select.value) {
+                    const team = teams.find(t => t.name === select.value);
+                    if (team) {
+                        logoImg.src = `./teams_logos/${team.logo}`;
+                        logoImg.style.display = "inline";
+                    }
+                } else {
+                    logoImg.style.display = "none";
+                }
+            });
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            // Convert the table to canvas
+            const canvas = await html2canvas(document.querySelector("table"));
+            const imgData = canvas.toDataURL("image/png");
+
+            // Add the canvas image to PDF
+            pdf.addImage(imgData, "PNG", 15, 40, 180, 160);
+
+            // Add the predictor's name
+            const name = document.querySelector("input[type=text]").value;
+            pdf.text(`Predicted by: ${name}`, 15, 20);
+
+            // Save the PDF
+            pdf.save("ucl_prediction.pdf");
+        }
+
+        window.onload = () => {
+            populateSelects();
+            document.querySelector(".submit-button").addEventListener("click", generatePDF);
+        };
+    </script>
+</head>
+<body>
+    <h1>Dowaniyat Almusaileet UCL league phase 2024/2025 prediction</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Team Logo</th>
+                <th>Team</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <input type="text" placeholder="Enter your name" style="padding: 10px; font-size: 16px;">
+    <button class="submit-button">Submit and Download PDF</button>
+</body>
+</html>
